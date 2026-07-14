@@ -1,0 +1,15 @@
+# Doc-Orchestrator Configuration
+# LLM configuration is handled by the agent platform — NOT configured here.
+
+# Output directory for generated documents
+output_dir: ./output
+
+# Fonts directory — place .ttf files here for Chinese official document standards
+# Required fonts: 仿宋_GB2312, 黑体, 楷体_GB2312, 方正小标宋, Times New Roman
+fonts_dir: ~/.fonts
+
+# LibreOffice binary path (for TOC rendering, optional)
+# libreoffice_binary: soffice
+
+# Mermaid CLI binary path (for flowchart rendering, optional)
+# mermaid_binary: mmdc
