@@ -39,6 +39,8 @@
 
 每个 unit 描述模板中的一个结构元素，按文档顺序排列。
 
+**所有 unit 都有 `para_index` 字段**，记录该元素在 `document.body` 子元素中的位置索引。`assemble_docx.py` 使用此字段定位对应的 XML 元素进行原地修改。
+
 #### heading — 标题
 
 ```json
@@ -48,7 +50,8 @@
   "element": "heading",
   "level": 1,
   "text": "引言",
-  "numbering": "第一章"
+  "numbering": "第一章",
+  "para_index": 22
 }
 ```
 
@@ -63,11 +66,17 @@
   "id": "p-002",
   "type": "fixed",
   "element": "paragraph",
-  "text": "本报告依据《国家电网信息化建设管理办法》编制。"
+  "text": "本报告依据《国家电网信息化建设管理办法》编制。",
+  "para_index": 25,
+  "spacer": false,
+  "cover": false
 }
 ```
 
-模板中的指导文字、固定说明。**Agent 不需要为这些 unit 生成 content**——装配脚本直接使用 `text` 字段。
+模板中的固定文字、封面间距段落等。**Agent 不需要为这些 unit 生成 content**——装配脚本保留原始段落不变。
+
+- `spacer`: 可选，封面页中的空白间距段落
+- `cover`: 可选，标记该段落属于封面页区域（第一个 H1 之前的所有内容）
 
 #### paragraph (generated) — 待生成段落
 
@@ -76,11 +85,17 @@
   "id": "p-003",
   "type": "generated",
   "element": "paragraph",
-  "description": "编写目的正文"
+  "description": "编写目的正文",
+  "para_index": 27,
+  "cover": false,
+  "has_x_placeholder": false
 }
 ```
 
-需要 Agent 创作内容的段落。`description` 来自模板中的简短提示文字，用于帮助 Agent 理解应写什么内容。
+需要 Agent 创作内容的段落。`description` 来自模板文本，可能是简短提示、`【...】` 指引文字、`XX/××××` 占位符模式或封面信息。
+
+- `cover`: 可选，标记该段落属于封面页
+- `has_x_placeholder`: 可选，标记该段落包含 `XX` 或 `××××` 等占位符模式
 
 Agent 在 content.json 中为这些 unit 提供内容：
 ```json
